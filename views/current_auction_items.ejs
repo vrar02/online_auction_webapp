@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title><%= pageTitle %> </title>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="./css/auction_items.css" rel="stylesheet">
+<script>src="./js/current_auction.js"</script>
+<script>src="/socket.io/socket.io.js"</script>
+<script src="https://cdn.socket.io/4.4.0/socket.io.min.js"></script>
+<script>
+    const socket=io("http://localhost:3000");
+    socket.on('connection');
+   socket.on('bid_done',(data)=>{
+        var price_id='#'+'price_painting_'+data.painting_id;
+        var button_id='.'+'button_painting_'+data.painting_id;
+       document.querySelector(price_id).innerHTML='Price: '+data.current_bid_price+'$';
+       document.querySelector(button_id).button.value='{"painting_id":'+data.painting_id+',"current_bid_price":'+data.current_bid_price+',"initial_bid_price":'+data.start_price+',"increment":'+data.increment+'}';
+    })
+</script>
+</head>
+
+<!------ Include the above in your HEAD tag ---------->
+<body>
+<div class="wrapper">
+    <div class="container">
+        <div class="row g-1">
+            <% auction_items.forEach(function(element){%>
+            <div class="col-md-3">
+                <div class="card p-3">
+                    <div class="text-center"> <img src="./images/<%=element.title%>.jpg" height="150" width="200"> </div>
+                    
+                    <div class="product-details"> 
+                        <span class="font-weight-bold d-block"><%=element.title%></span> 
+                        <%if(element.current_bid_price>0){var x=10%>
+                            <span id="price_painting_<%=element.picture%>">Price: <%=element.current_bid_price%>$</span>
+                         <%} else{%>
+                            <span id="price_painting_<%=element.picture%>">Price: <%=element.start_price%>$ </span>
+                         <% }%>
+                        
+                        
+                        
+                        <form action="/biditem" method="post">
+                        <div class="buttons d-flex flex-row button_painting_<%=element.picture%> ">
+                            <!-- <div class="cart"><i class="fa fa-shopping-cart"><span>$300</span></i></div> -->
+                             <button name="bid_details" value='{"painting_id":<%=element.picture%>,"current_bid_price":<%=element.current_bid_price%>,"initial_bid_price":<%=element.start_price%>,"increment":<%=element.increment%>}' class="btn btn-success cart-button btn-block">
+                                <span class="dot">1</span>Bid </button>
+                        </div>
+                        <div class="weight"> <small>Bid Increment: <%=element.increment%>$ </small></div>
+                        </form>
+                        </div>
+                </div>
+            </div>
+            <%}) %> 
+            
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+
+
+
+ 
+
+

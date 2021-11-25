@@ -1,0 +1,31 @@
+{
+  "name": "online_auction_webapp",
+  "version": "1.0.0",
+  "description": "ONLINE Auction web application",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./bin/start.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vrar02/online_auction_webapp.git"
+  },
+  "author": "vivek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vrar02/online_auction_webapp/issues"
+  },
+  "homepage": "https://github.com/vrar02/online_auction_webapp#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "ejs-lint": "^1.2.1",
+    "express": "^4.17.1",
+    "express-mysql-session": "^2.1.7",
+    "express-session": "^1.17.2",
+    "JSON": "^1.0.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.15",
+    "socket.io": "^4.4.0"
+  }
+}
