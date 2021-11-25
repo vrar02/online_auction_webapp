@@ -75,7 +75,7 @@ module.exports = (config) => {
   });
 
   app.get("/", (request, response) => {
-    response.render("temp");
+    response.render("home");
   });
 
   app.use("/", isAuth, routes());
