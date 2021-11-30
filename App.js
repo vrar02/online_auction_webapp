@@ -57,7 +57,7 @@ module.exports = (config) => {
         request.session.userInfo = email;
         console.log(request.session);
         request.session.isAuth = true;
-        response.redirect("/auction");
+        response.redirect("/paintings");
       } else {
         response.render("login");
       }
@@ -69,7 +69,7 @@ module.exports = (config) => {
   app.use("/logout", (request, response) => {
     request.session.destroy((err) => {
       if (!err) {
-        response.send("Logout");
+        response.render("home");
       }
     });
   });

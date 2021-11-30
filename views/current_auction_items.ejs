@@ -23,13 +23,16 @@
 
 <!------ Include the above in your HEAD tag ---------->
 <body>
+    <header>
+        <%- include('nav_bar') %> 
+    </header>
 <div class="wrapper">
     <div class="container">
         <div class="row g-1">
             <% auction_items.forEach(function(element){%>
             <div class="col-md-3">
                 <div class="card p-3">
-                    <div class="text-center"> <img src="./images/<%=element.title%>.jpg" height="150" width="200"> </div>
+                    <div class="text-center"><a href="/auction/<%=element.picture%>" target="_blank"> <img src="./images/<%=element.title%>.jpg" height="150" width="200" title="Click on painting to view more details"> </a> </div>
                     
                     <div class="product-details"> 
                         <span class="font-weight-bold d-block"><%=element.title%></span> 
@@ -39,6 +42,7 @@
                             <span id="price_painting_<%=element.picture%>">Price: <%=element.start_price%>$ </span>
                          <% }%>
                         
+                         
                         
                         
                         <form action="/biditem" method="post">

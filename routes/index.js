@@ -16,6 +16,62 @@ module.exports = () => {
     });
   });
 
+  router.get("/auction/:shortname", async (request, response, next) => {
+    var painting_id = request.params.shortname;
+    const oa = new OnlineAction();
+    const painting_details = await oa.fetchPaintingDetails(painting_id);
+    console.log(painting_details);
+    response.render("product_details", {
+      pageTitle: "Painting Details",
+      painting_item: painting_details,
+    });
+  });
+
+  router.get("/paintings_won", async (request, response) => {
+    const oa = new OnlineAction();
+    var buyer_email = request.session.userInfo;
+    var buyer_ids = await oa.fetchBuyerId(buyer_email);
+    var buyer_id = buyer_ids[0].member_id;
+
+    var paintings_won = await oa.fetchPaintingsWon(buyer_id);
+
+    console.log("paintings won", paintings_won);
+    response.render("paintings_won", {
+      pageTitle: "Paintings Won",
+      won_paintings: paintings_won,
+    });
+  });
+
+  router.get("/watch_list", async (request, response) => {
+    const oa = new OnlineAction();
+    var buyer_email = request.session.userInfo;
+    var buyer_ids = await oa.fetchBuyerId(buyer_email);
+    var buyer_id = buyer_ids[0].member_id;
+
+    var watch_list = await oa.fetchBuyerWatchlist(buyer_id);
+
+    console.log("buyer watchlist", watch_list);
+    response.render("watch_list", {
+      pageTitle: "Watch List",
+      watch_list: watch_list,
+    });
+  });
+
+  router.get("/profile_details", async (request, response) => {
+    const oa = new OnlineAction();
+    var member_email = request.session.userInfo;
+    var member_ids = await oa.fetchBuyerId(member_email);
+    var member_id = member_ids[0].member_id;
+
+    var profile_details = await oa.fetchMemberDetails(member_id);
+
+    console.log("profile details", profile_details);
+    response.render("profile_details", {
+      pageTitle: "Profile",
+      details_profile: profile_details,
+    });
+  });
+
   router.post("/biditem", async (request, response) => {
     var { bid_details } = request.body;
     console.log("bid_details", bid_details);
@@ -50,6 +106,23 @@ module.exports = () => {
     });
 
     response.redirect("/auction");
+  });
+
+  // seller routes
+
+  router.get("/paintings", async (request, response) => {
+    const oa = new OnlineAction();
+    var member_email = request.session.userInfo;
+    var member_ids = await oa.fetchBuyerId(member_email); //this should be member_id
+    var member_id = member_ids[0].member_id;
+
+    //var paintings = await oa.fetchPostedPaintings(member_id);
+    var paintings = null;
+    console.log("Paintings", paintings);
+    response.render("seller_paintings", {
+      pageTitle: "Paintings in Auction",
+      paintings: paintings,
+    });
   });
 
   return router;
