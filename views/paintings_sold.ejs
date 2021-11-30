@@ -30,7 +30,7 @@
     <div class="container">
         <div class="row g-1">
 
-            <% paintings.forEach(function(element){%>
+            <% paintings_sold.forEach(function(element){%>
             <div class="col-md-6">
                 <div class="card p-3">
                     <div class="text-center"> <img src="./images/<%=element.title%>.jpg" height="200" width="250"> </a> </div>
@@ -38,13 +38,14 @@
                     <div class="product-details"> 
                         <span class="font-weight-bold d-block"><%=element.title%></span>
                         
+                        
                         <span >Start Price: $ <%=element.start_price%></span>
                         
                         
                         <div class="buttons d-flex flex-row  ">
                             <!-- <div class="cart"><i class="fa fa-shopping-cart"><span>$300</span></i></div> -->
-                             <button name="bid_details" class="btn btn-warning cart-button btn-block">
-                                <span class="dot">1</span>Current Bid Price: $ <%=element.current_bid_price%>  </button>
+                             <button name="bid_details" class="btn btn-success cart-button btn-block">
+                                <span class="dot">1</span>Sold Price: $ <%=element.sold_price%>  </button>
                         </div>
                         <div class="weight"> <small>Increment :<%=element.increment%>$</small></div>
                         

@@ -180,6 +180,46 @@ class OnlineAction {
       mysql_obj.disconnect();
     }
   }
+
+  async fetchPostedPaintings(seller_id) {
+    const mysql_obj = new MySQLBackend();
+    try {
+      const connect_obj = mysql_obj.connect();
+      if (connect_obj != null) {
+        console.log("connected to db");
+        const sql = `select * from paintings_auction_view where seller=?`;
+        const query = util.promisify(connect_obj.query).bind(connect_obj);
+        var posted_paintings = await query(sql, [seller_id]);
+        console.log("posted paintings", posted_paintings);
+        return posted_paintings;
+      }
+    } catch (err) {
+      throw new Error(err);
+    } finally {
+      console.log("Disconnected from db");
+      mysql_obj.disconnect();
+    }
+  }
+
+  async fetchPaintingsSold(seller_id) {
+    const mysql_obj = new MySQLBackend();
+    try {
+      const connect_obj = mysql_obj.connect();
+      if (connect_obj != null) {
+        console.log("connected to db");
+        const sql = `select * from sold_price_painting where seller=?`;
+        const query = util.promisify(connect_obj.query).bind(connect_obj);
+        var paintings_sold = await query(sql, [seller_id]);
+        console.log("sold paintings", paintings_sold);
+        return paintings_sold;
+      }
+    } catch (err) {
+      throw new Error(err);
+    } finally {
+      console.log("Disconnected from db");
+      mysql_obj.disconnect();
+    }
+  }
 }
 
 module.exports = OnlineAction;

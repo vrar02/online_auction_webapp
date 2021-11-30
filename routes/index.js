@@ -116,12 +116,25 @@ module.exports = () => {
     var member_ids = await oa.fetchBuyerId(member_email); //this should be member_id
     var member_id = member_ids[0].member_id;
 
-    //var paintings = await oa.fetchPostedPaintings(member_id);
-    var paintings = null;
+    var paintings = await oa.fetchPostedPaintings(member_id);
     console.log("Paintings", paintings);
     response.render("seller_paintings", {
-      pageTitle: "Paintings in Auction",
+      pageTitle: "Paintings Posted",
       paintings: paintings,
+    });
+  });
+
+  router.get("/paintings_sold", async (request, response) => {
+    const oa = new OnlineAction();
+    var member_email = request.session.userInfo;
+    var member_ids = await oa.fetchBuyerId(member_email); //this should be member_id
+    var member_id = member_ids[0].member_id;
+
+    var paintings_sold = await oa.fetchPaintingsSold(member_id);
+    console.log("Paintings Sold", paintings_sold);
+    response.render("paintings_sold", {
+      pageTitle: "Paintings Sold",
+      paintings_sold: paintings_sold,
     });
   });
 
