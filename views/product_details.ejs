@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link href="../css/auction_items.css" rel="stylesheet">
+<script src="../js/current_auction.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+    <title><%= pageTitle %> </title></head>
+    
+    <body>
+        <div class="wrapper">
+        <div class="container">
+            <% painting_item.forEach(function(element){%>
+                
+        	<div class="row g-1">  
+                
+                <div class="card p-1">
+               <div class="col-xs-4 item-photo">
+                    <img style="max-width:100%;" src="../images/<%=element.title%>.jpg" />
+                </div>
+                <div class="col-xs-5" style="border:0px solid gray">
+                    <!-- Datos del vendedor y titulo del producto -->
+                    <h3><%=element.title%></h3>    
+                    <h5 style="color:#337ab7">  <%=element.description%>      <small style="color:#337ab7">Size: (<%=element.width%> * <%=element.length%> )</small></h5>
+                    
+                    <!-- Precios -->
+                    <h6 class="title-price"><small></small></h6>
+                    <h3 style="margin-top:0px;">Start Price: $ <%=element.initial_bid_price%> </h3>
+        
+                    
+                    <div class="section" style="padding-bottom:5px;">
+                        <h6 class="title-attr"><small>Increment: $ <%= element.increment %> </small></h6>                    
+                        <div>
+                            <div class="attr2">Start Date: <%=element.start_date%></div>
+                            <div class="attr2">End Date: <%=element.end_date %> </div>
+                        </div>
+                    </div>   
+                    
+                                                          
+                </div>                              
+        
+                		
+            </div>
+            <% }) %> 
+            </div>
+        </div> 
+        </div>       
+    </body>
+</html>

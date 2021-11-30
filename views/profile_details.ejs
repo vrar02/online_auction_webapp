@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title><%= pageTitle %> </title>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="./css/auction_items.css" rel="stylesheet">
+<script>src="./js/current_auction.js"</script>
+<script>src="/socket.io/socket.io.js"</script>
+<script src="https://cdn.socket.io/4.4.0/socket.io.min.js"></script>
+<script>
+    const socket=io("http://localhost:3000");
+    socket.on('connection');
+   socket.on('bid_done',(data)=>{
+        var price_id='#'+'price_painting_'+data.painting_id;
+        var button_id='.'+'button_painting_'+data.painting_id;
+       document.querySelector(price_id).innerHTML='Price: '+data.current_bid_price+'$';
+       document.querySelector(button_id).button.value='{"painting_id":'+data.painting_id+',"current_bid_price":'+data.current_bid_price+',"initial_bid_price":'+data.start_price+',"increment":'+data.increment+'}';
+    })
+</script>
+</head>
+
+<body>
+    <header>
+        <%- include('nav_bar') %> 
+    </header>
+<div class="wrapper">
+    <div class="container">
+        <!-- <div  class="row g-1"> -->
+            <% details_profile.forEach(function(element){%>
+                <div style="margin:auto;" class="col-md-5">
+                    <div class="card p-3">
+                        <div class="product-details"> 
+                            <div class="row">
+                                <div class="col-sm-3 col-md-4 col-5">
+                                    <label style="font-weight:bold;">Email</label>
+                                </div>
+                                <div class="col-md-7 col-6">
+                                    <label style="font-weight:bold;"><%=element.email_id%></label>    
+                                </div>
+                                <div class="col-sm-3 col-md-4 col-5">
+                                    <label style="font-weight:bold;">First Name</label>
+                                </div>
+                                <div class="col-md-7 col-6">
+                                    <label style="font-weight:bold;"><%=element.fname%></label>    
+                                </div>
+
+                                <div class="col-sm-3 col-md-4 col-5">
+                                    <label style="font-weight:bold;">Last Name</label>
+                                </div>
+                                <div class="col-md-7 col-6">
+                                    <label style="font-weight:bold;"><%=element.lname%></label>    
+                                </div>
+
+                                <div class="col-sm-3 col-md-4 col-5">
+                                    <label style="font-weight:bold;">Address</label>
+                                </div>
+                                <div class="col-md-7 col-6">
+                                    <label style="font-weight:bold;"><%=element.address%> 16500 lauder lane apt 23103</label>    
+                                </div>
+
+                                <div class="col-sm-3 col-md-4 col-5">
+                                    <label style="font-weight:bold;">City</label>
+                                </div>
+                                <div class="col-md-7 col-6">
+                                    <label style="font-weight:bold;"><%=element.city%></label>    
+                                </div>
+
+                                <div class="col-sm-3 col-md-4 col-5">
+                                    <label style="font-weight:bold;">State</label>
+                                </div>
+                                <div class="col-md-7 col-6">
+                                    <label style="font-weight:bold;"><%=element.state%></label>    
+                                </div>
+
+                                <div class="col-sm-3 col-md-4 col-5">
+                                    <label style="font-weight:bold;">Country</label>
+                                </div>
+                                <div class="col-md-7 col-6">
+                                    <label style="font-weight:bold;"><%=element.country%></label>    
+                                </div>
+
+                                <div class="col-sm-3 col-md-4 col-5">
+                                    <label style="font-weight:bold;">Pincode</label>
+                                </div>
+                                <div class="col-md-7 col-6">
+                                    <label style="font-weight:bold;"><%=element.pincode%></label>    
+                                </div>
+                            </div>
+                            
+                        
+                        </div>
+                    </div>
+                </div>
+            <%})%>
+        <!-- </div> -->
+    </div>
+</div>
+</body>
+</html>

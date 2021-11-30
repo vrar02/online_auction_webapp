@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title><%= pageTitle %> </title>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="./css/auction_items.css" rel="stylesheet">
+<script>src="./js/current_auction.js"</script>
+<script>src="/socket.io/socket.io.js"</script>
+<script src="https://cdn.socket.io/4.4.0/socket.io.min.js"></script>
+<script>
+    const socket=io("http://localhost:3000");
+    socket.on('connection');
+   socket.on('bid_done',(data)=>{
+        var price_id='#'+'price_painting_'+data.painting_id;
+        var button_id='.'+'button_painting_'+data.painting_id;
+       document.querySelector(price_id).innerHTML='Price: '+data.current_bid_price+'$';
+       document.querySelector(button_id).button.value='{"painting_id":'+data.painting_id+',"current_bid_price":'+data.current_bid_price+',"initial_bid_price":'+data.start_price+',"increment":'+data.increment+'}';
+    })
+</script>
+</head>
+
+<!------ Include the above in your HEAD tag ---------->
+<body>
+    <header>
+        <%- include('nav_bar') %> 
+    </header>
+<div class="wrapper">
+    <div class="container">
+        <div class="row g-1">
+            <% won_paintings.forEach(function(element){%>
+            <div class="col-md-6">
+                <div class="card p-3">
+                    <div class="text-center"> <img src="./images/<%=element.title%>.jpg" height="200" width="250"> </a> </div>
+                    
+                    <div class="product-details"> 
+                        <span class="font-weight-bold d-block"><%=element.title%></span> 
+                        
+                        <span >Start Price: <%=element.start_price%>$</span>
+                        
+                        
+                        <div class="buttons d-flex flex-row  ">
+                            <!-- <div class="cart"><i class="fa fa-shopping-cart"><span>$300</span></i></div> -->
+                             <button name="bid_details" class="btn btn-success cart-button btn-block">
+                                <span class="dot">1</span>Won for: $ <%= element.sold_price %> </button>
+                        </div>
+                        <div class="weight"> <small>Seller : <%=element.fname%></small></div>
+                        
+                                
+                                <form action="#" >
+                                    <!-- <label for="fname">Feedback:</label> -->
+                                    
+                                    <input type="text" maxLength="5" id="feedback" value="" name="feeback">
+                                    <input type="submit" value="Feedback">   
+                                </form>
+                            
+            
+                        </div>
+                </div>
+            </div>
+            <%}) %> 
+            
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+
+
+
+ 
+
+
