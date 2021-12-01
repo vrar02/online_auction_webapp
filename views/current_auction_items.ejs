@@ -18,6 +18,8 @@
        document.querySelector(price_id).innerHTML='Price: '+data.current_bid_price+'$';
        document.querySelector(button_id).button.value='{"painting_id":'+data.painting_id+',"current_bid_price":'+data.current_bid_price+',"initial_bid_price":'+data.start_price+',"increment":'+data.increment+'}';
     })
+
+   
 </script>
 </head>
 
@@ -62,6 +64,10 @@
     </div>
 </div>
 </body>
+
+<script>
+    document.querySelector('.auction').classList.add('active');
+</script>
 
 </html>
 
