@@ -6,6 +6,7 @@ const session = require("express-session");
 const mysql2 = require("mysql2/promise");
 const MySQLStore = require("express-mysql-session")(session);
 const VerifyLogin = require("./services/VerfiyLogin");
+const { request, response } = require("express");
 
 module.exports = (config) => {
   const app = express();
@@ -87,6 +88,10 @@ module.exports = (config) => {
         response.render("home");
       }
     });
+  });
+
+  app.get("/about", (request, response) => {
+    response.render("about");
   });
 
   app.get("/", (request, response) => {
