@@ -89,7 +89,7 @@ class OnlineAction {
       const connect_obj = mysql_obj.connect();
       if (connect_obj != null) {
         console.log("connected to db");
-        const sql = `select picture, title, max(bid_price) as buyer_bid_price,current_bid_price from paintings_auction_view as pa,bids where buyer_id=? and bids.painting_id=pa.picture group by picture  ;`;
+        const sql = `select picture, title, max(bid_price) as buyer_bid_price,current_bid_price,increment from paintings_auction_view as pa,bids where buyer_id=? and bids.painting_id=pa.picture group by picture  ;`;
         const query = util.promisify(connect_obj.query).bind(connect_obj);
         var watch_list = await query(sql, [buyer_id]);
         return watch_list;
@@ -207,11 +207,31 @@ class OnlineAction {
       const connect_obj = mysql_obj.connect();
       if (connect_obj != null) {
         console.log("connected to db");
-        const sql = `select * from sold_price_painting where seller=?`;
+        const sql = `select * from winner_seller_painting where seller=?`;
         const query = util.promisify(connect_obj.query).bind(connect_obj);
         var paintings_sold = await query(sql, [seller_id]);
         console.log("sold paintings", paintings_sold);
         return paintings_sold;
+      }
+    } catch (err) {
+      throw new Error(err);
+    } finally {
+      console.log("Disconnected from db");
+      mysql_obj.disconnect();
+    }
+  }
+
+  async fetchPaintingsUnSold(seller_id) {
+    const mysql_obj = new MySQLBackend();
+    try {
+      const connect_obj = mysql_obj.connect();
+      if (connect_obj != null) {
+        console.log("connected to db");
+        const sql = `select * from unsold_paintings where seller_id=?`;
+        const query = util.promisify(connect_obj.query).bind(connect_obj);
+        var paintings_unsold = await query(sql, [seller_id]);
+        console.log("unsold paintings", paintings_unsold);
+        return paintings_unsold;
       }
     } catch (err) {
       throw new Error(err);

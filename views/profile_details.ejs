@@ -23,7 +23,11 @@
 
 <body>
     <header>
-        <%- include('nav_bar') %> 
+        <% if(isSeller){ %> 
+        <%- include('nav_bar_seller') %> 
+        <%}else{%>
+            <%- include('nav_bar') %> 
+        <%}%>
     </header>
 <div class="wrapper">
     <div class="container">

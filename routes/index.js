@@ -1,3 +1,4 @@
+const e = require("cors");
 const express = require("express");
 
 const router = express.Router();
@@ -5,7 +6,23 @@ const router = express.Router();
 const OnlineAction = require("../services/OnlineAuction");
 
 module.exports = () => {
-  router.get("/auction", async (request, response) => {
+  const isSeller = (request, response, next) => {
+    if (request.session.isSeller) {
+      next();
+    } else {
+      response.send("Not Authorized to access");
+    }
+  };
+
+  const isBuyer = (request, response, next) => {
+    if (request.session.isBuyer) {
+      next();
+    } else {
+      response.send("Not Authorized to access");
+    }
+  };
+
+  router.get("/auction", isBuyer, async (request, response) => {
     const oa = new OnlineAction();
     const items = await oa.fetchCurrentAuctionItems();
 
@@ -16,18 +33,22 @@ module.exports = () => {
     });
   });
 
-  router.get("/auction/:shortname", async (request, response, next) => {
-    var painting_id = request.params.shortname;
-    const oa = new OnlineAction();
-    const painting_details = await oa.fetchPaintingDetails(painting_id);
-    console.log(painting_details);
-    response.render("product_details", {
-      pageTitle: "Painting Details",
-      painting_item: painting_details,
-    });
-  });
+  router.get(
+    "/auction/:shortname",
+    isBuyer,
+    async (request, response, next) => {
+      var painting_id = request.params.shortname;
+      const oa = new OnlineAction();
+      const painting_details = await oa.fetchPaintingDetails(painting_id);
+      console.log(painting_details);
+      response.render("product_details", {
+        pageTitle: "Painting Details",
+        painting_item: painting_details,
+      });
+    }
+  );
 
-  router.get("/paintings_won", async (request, response) => {
+  router.get("/paintings_won", isBuyer, async (request, response) => {
     const oa = new OnlineAction();
     var buyer_email = request.session.userInfo;
     var buyer_ids = await oa.fetchBuyerId(buyer_email);
@@ -42,7 +63,7 @@ module.exports = () => {
     });
   });
 
-  router.get("/watch_list", async (request, response) => {
+  router.get("/watch_list", isBuyer, async (request, response) => {
     const oa = new OnlineAction();
     var buyer_email = request.session.userInfo;
     var buyer_ids = await oa.fetchBuyerId(buyer_email);
@@ -62,6 +83,12 @@ module.exports = () => {
     var member_email = request.session.userInfo;
     var member_ids = await oa.fetchBuyerId(member_email);
     var member_id = member_ids[0].member_id;
+    let isSeller = null;
+    if (request.session.isSeller) {
+      isSeller = true;
+    } else {
+      isSeller = false;
+    }
 
     var profile_details = await oa.fetchMemberDetails(member_id);
 
@@ -69,10 +96,11 @@ module.exports = () => {
     response.render("profile_details", {
       pageTitle: "Profile",
       details_profile: profile_details,
+      isSeller: isSeller,
     });
   });
 
-  router.post("/biditem", async (request, response) => {
+  router.post("/biditem", isBuyer, async (request, response) => {
     var { bid_details } = request.body;
     console.log("bid_details", bid_details);
     const bid_obj = JSON.parse(bid_details);
@@ -110,7 +138,7 @@ module.exports = () => {
 
   // seller routes
 
-  router.get("/paintings", async (request, response) => {
+  router.get("/paintings", isSeller, async (request, response) => {
     const oa = new OnlineAction();
     var member_email = request.session.userInfo;
     var member_ids = await oa.fetchBuyerId(member_email); //this should be member_id
@@ -124,7 +152,7 @@ module.exports = () => {
     });
   });
 
-  router.get("/paintings_sold", async (request, response) => {
+  router.get("/paintings_sold", isSeller, async (request, response) => {
     const oa = new OnlineAction();
     var member_email = request.session.userInfo;
     var member_ids = await oa.fetchBuyerId(member_email); //this should be member_id
@@ -135,6 +163,20 @@ module.exports = () => {
     response.render("paintings_sold", {
       pageTitle: "Paintings Sold",
       paintings_sold: paintings_sold,
+    });
+  });
+
+  router.get("/paintings_unsold", isSeller, async (request, response) => {
+    const oa = new OnlineAction();
+    var member_email = request.session.userInfo;
+    var member_ids = await oa.fetchBuyerId(member_email); //this should be member_id
+    var member_id = member_ids[0].member_id;
+
+    var paintings_unsold = await oa.fetchPaintingsUnSold(member_id);
+    console.log("Paintings UnSold", paintings_unsold);
+    response.render("paintings_unsold", {
+      pageTitle: "Paintings Unsold",
+      paintings_unsold: paintings_unsold,
     });
   });
 

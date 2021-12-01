@@ -53,11 +53,26 @@ module.exports = (config) => {
         password
       );
       console.log("login:" + login_details);
-      if (login_details) {
+      var login = false;
+      if (login_details.length != 0) {
+        login = true;
+      }
+
+      if (login) {
         request.session.userInfo = email;
         console.log(request.session);
         request.session.isAuth = true;
-        response.redirect("/paintings");
+
+        var isbuyer = await verify_login_obj.verifyBuyer(
+          login_details[0].member_id
+        );
+        if (isbuyer) {
+          request.session.isBuyer = true;
+          response.redirect("/auction");
+        } else {
+          request.session.isSeller = true;
+          response.redirect("/paintings");
+        }
       } else {
         response.render("login");
       }
