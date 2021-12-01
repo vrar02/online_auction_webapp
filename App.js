@@ -6,6 +6,8 @@ const session = require("express-session");
 const mysql2 = require("mysql2/promise");
 const MySQLStore = require("express-mysql-session")(session);
 const VerifyLogin = require("./services/VerfiyLogin");
+const OnlineAuction = require("./services/OnlineAuction");
+const multer = require("multer")
 
 module.exports = (config) => {
   const app = express();
@@ -22,6 +24,43 @@ module.exports = (config) => {
 
   var connection = mysql2.createPool(config.mysql.options);
   var sessionStore = new MySQLStore({}, connection);
+
+  // Set variables for downloading uploaded images
+  var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+  
+        // Uploads is the Upload_folder_name
+        cb(null, "./client/images")
+    },
+    filename: function (req, file, cb) {
+      cb(null, req.body.title+".jpg")
+    }
+  })
+  
+  const maxSize = 1 * 1000 * 1000;
+    
+  var upload = multer({ 
+      storage: storage,
+      limits: { fileSize: maxSize },
+      fileFilter: function (req, file, cb){
+      
+          // Set the filetypes, it is optional
+          var filetypes = /jpeg|jpg|png/;
+          var mimetype = filetypes.test(file.mimetype);
+    
+          var extname = filetypes.test(path.extname(
+                      file.originalname).toLowerCase());
+          
+          if (mimetype && extname) {
+              return cb(null, true);
+          }
+        
+          cb("Error: File upload only supports the "
+                  + "following filetypes - " + filetypes);
+        } 
+    
+  // filedata is the name of file attribute
+  }).single("filedata");    
 
   app.use(
     session({
@@ -41,6 +80,39 @@ module.exports = (config) => {
       response.redirect("login");
     }
   };
+
+  // For uploading the painting
+  app.use("/fileupload", async (request,response)=>{
+    var seller_email = request.session.userInfo;
+    
+    upload(request,response,async function(err) {
+      
+      if(err) {
+
+        // ERROR occured (here it can be occured due
+        // to uploading image of size greater than
+        // 1MB or uploading different file type)
+  
+        response.send(err)
+    }
+    else {
+
+      var auction_obj = new OnlineAuction()
+      var seller_ids =  await auction_obj.fetchBuyerId(seller_email);
+      console.log("Seller email",seller_email)
+      var seller_ids = seller_ids[0].member_id;
+
+      auction_obj.insertIntoPainting(request.body,seller_ids)
+      
+
+
+    }
+
+    response.redirect("/paintings");
+    
+    });
+  })
+
 
   app.use("/login", async (request, response) => {
     if (!request.session.isAuth) {
