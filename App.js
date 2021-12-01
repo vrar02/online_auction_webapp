@@ -8,7 +8,6 @@ const MySQLStore = require("express-mysql-session")(session);
 const VerifyLogin = require("./services/VerfiyLogin");
 const OnlineAuction = require("./services/OnlineAuction");
 const multer = require("multer")
-const { request, response } = require("express");
 
 module.exports = (config) => {
   const app = express();
