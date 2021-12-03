@@ -1,5 +1,5 @@
-# online_auction_webapp
-online auction website application
+
+online painting auction web application
 
 CS6360 Couse Project
 ---------------------------
