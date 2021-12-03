@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<head>
+  <title><%= pageTitle %> </title>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="./css/auction_items.css" rel="stylesheet">
+<script>src="./js/current_auction.js"</script>
+<script>
+  function onLoad(){
+    $("#paint_type").change(function(e){
+      var paint_type =  $(this).val()
+      var toAppend = ''
+      $("paintdiv").html("")
+      
+      if (paint_type==1){
+        toAppend = `<div class="form-group">
+  <label class="col-md-4 control-label" for="increment">Brushstrokes</label>  
+  <div class="col-md-4">
+  <input id="brushstrokes" name="brushstrokes" placeholder="Brushstrokes" class="form-control input-md" required="" type="number">
+  </div>
+  <label class="col-md-4 control-label" for="increment">Resolution</label>  
+  <div class="col-md-4">
+  <input id="resolution" name="resolution" placeholder="Resolution" class="form-control input-md" required="" type="number">
+  </div>
+</div> `
+        $("#paintdiv").html(toAppend); return;
+      }
+      else if (paint_type==3){
+        toAppend = `<div class="form-group">
+  <label class="col-md-4 control-label" for="increment">Captured With</label>  
+  <div class="col-md-4">
+  <input id="capturedwith" name="capturedwith" placeholder="Captured With" class="form-control input-md" required="" type="number">
+  </div>
+</div> `
+        $("#paintdiv").html(toAppend); return;
+      }
+
+      else if (paint_type==2){
+        toAppend = `<div class="form-group">
+  <label class="col-md-4 control-label" for="increment">Oil Type</label>  
+  <div class="col-md-4">
+  <input id="oiltype" name="oiltype" placeholder="Oil Type" class="form-control input-md" required="" type="number">
+  </div>
+</div> `
+        $("#paintdiv").html(toAppend); return;
+      }
+    })
+  }
+
+</script>
+</head>
+<!------ Include the above in your HEAD tag ---------->
+<body onload="onLoad()">
+  <header>
+    <%- include('nav_bar_seller') %> 
+  </header>
+<form class="form-horizontal" action="/fileupload" method="post" enctype="multipart/form-data">
+<!-- <form action="upload" method="post" enctype="multipart/form-data"> -->
+<fieldset>
+
+<!-- Form Name -->
+<legend style="padding-left: 1%;">Upload your painting</legend>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="product_id">TITLE</label>  
+  <div class="col-md-4">
+  <input id="title" name="title" placeholder="TITLE" class="form-control input-md" required="" type="text">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="description">DESCRIPTION</label>  
+  <div class="col-md-4">
+  <input id="description" name="description" placeholder="DESCRIPTION" class="form-control input-md" required="" type="text">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="width">WIDTH</label>  
+  <div class="col-md-4">
+  <input id="width" name="width" placeholder="WIDTH" class="form-control input-md" required="" type="number">
+    
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="length">LENGTH</label>  
+  <div class="col-md-4">
+  <input id="length" name="length" placeholder="LENGTH" class="form-control input-md" required="" type="number">
+    
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="start_date">START DATE</label>  
+  <div class="col-md-4">
+  <input id="start_date" name="start_date" placeholder="START DATE" class="form-control input-md" required="" type="datetime-local">
+    
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="end_date">END DATE</label>  
+  <div class="col-md-4">
+  <input id="end_date" name="end_date" placeholder="END DATE" class="form-control input-md" required="" type="datetime-local">
+    
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="initial_bid_price">INITIAL BID PRICE</label>  
+  <div class="col-md-4">
+  <input id="initial_bid_price" name="initial_bid_price" placeholder="PRICE" class="form-control input-md" required="" type="number">
+    
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="increment">INCREMENT</label>  
+  <div class="col-md-4">
+  <input id="increment" name="increment" placeholder="INCREMENT" class="form-control input-md" required="" type="number">
+    
+  </div>
+</div>
+
+<label style="padding-left: 1%;" for="painting_type">Painting Type</label>
+<select id="paint_type" name="painting_type" required>
+  <option value="1">Digital</option>
+  <option value="2">Oil</option>
+  <option value="3">Sand</option>
+</select>
+
+<div id="paintdiv">
+<div class="form-group">
+  <label class="col-md-4 control-label" for="increment">Brushstrokes</label>  
+  <div class="col-md-4">
+  <input id="brushstrokes" name="brushstrokes" placeholder="Brushstrokes" class="form-control input-md" required="" type="number">
+  </div>
+  <label class="col-md-4 control-label" for="increment">Resolution</label>  
+  <div class="col-md-4">
+  <input id="resolution" name="resolution" placeholder="Resolution" class="form-control input-md" required="" type="number">
+  </div>
+</div>
+</div>
+
+ <!-- File Button --> 
+<div class="form-group">
+  <label class="col-md-4 control-label" for="filebutton">Image Painting</label>
+  <div class="col-md-4">
+    <input id="filebutton" name="filedata" class="input-file" type="file">
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <div class="col-md-6" style="text-align: right;">'
+    <button id="singlebutton" name="singlebutton"  class="btn btn-primary">Upload</button>
+  </div>
+  <br>
+  </div>
+
+</fieldset>
+</form>
+</body>
+
+
