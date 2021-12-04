@@ -24,7 +24,7 @@
 
 -- View-4: Create a view which displays the current paintings of category digital in auction?
 
--- Ans. create view current_paintings as
+-- Ans. create view current__digital_paintings as
 -- select painting_id,title from painting p join digital_painitng d on p.painitng_id=d.painting_id where NOW() <= end_date;
 
 
