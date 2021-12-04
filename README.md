@@ -15,7 +15,7 @@ Naveen Senthil Kumar (NXS200067)
 
 
 Steps to run the application:
-Requirements: You need to setup the mysql database with sql statements shown in the report
+Requirements: You need to setup the mysql database by executing the .sql files present in the root directory.
 1) Install nodejs
 2) Clone the repo
 3) run the command "npm install"
