@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `painting`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `painting` (
-  `painting_id` int NOT NULL,
+  `painting_id` int NOT NULL auto_increment,
   `seller_id` int NOT NULL,
   `title` varchar(20) NOT NULL,
   `description` varchar(70) NOT NULL,

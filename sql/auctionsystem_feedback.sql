@@ -22,16 +22,16 @@
 DROP TABLE IF EXISTS `feedback`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `feedback` (
-  `member_id` int NOT NULL,
-  `painting_id` int NOT NULL,
-  `ratings` int DEFAULT NULL,
-  `comment` varchar(280) DEFAULT NULL,
-  PRIMARY KEY (`member_id`,`painting_id`),
-  KEY `painting_id` (`painting_id`),
-  CONSTRAINT `feedback_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`member_id`),
-  CONSTRAINT `feedback_ibfk_2` FOREIGN KEY (`painting_id`) REFERENCES `painting` (`painting_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE feedback (
+Feedback int not null auto_increment,
+member_id INT NOT NULL, 
+painting_id INT NOT NULL, 
+ratings INT, 
+comment VARCHAR(280), 
+PRIMARY KEY(feedback_id,member_id, painting_id), 
+FOREIGN KEY(member_id) REFERENCES member(member_id), 
+FOREIGN KEY(painting_id) REFERENCES painting(painting_id));
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

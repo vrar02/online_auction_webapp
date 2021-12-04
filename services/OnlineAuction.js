@@ -62,6 +62,26 @@ class OnlineAction {
     }
   }
 
+  async fetchFeedbackDetails(painting_id) {
+    const mysql_obj = new MySQLBackend();
+
+    try {
+      const connect_obj = mysql_obj.connect();
+      if (connect_obj != null) {
+        console.log("connected to db");
+        const sql = `select * from feedback_table where painting_id = ?`;
+        const query = util.promisify(connect_obj.query).bind(connect_obj);
+        var feedback_details = await query(sql, [painting_id]);
+        return feedback_details;
+      }
+    } catch (err) {
+      throw new Error(err);
+    } finally {
+      console.log("Disconnected from db");
+      mysql_obj.disconnect();
+    }
+  }
+
   async fetchPaintingsWon(buyer_id) {
     const mysql_obj = new MySQLBackend();
 
@@ -162,6 +182,26 @@ class OnlineAction {
     }
   }
 
+  async insertIntoFeedback(feedback_data, member_id, painting_id) {
+    const mysql_obj = new MySQLBackend();
+
+    try {
+      const connect_obj = mysql_obj.connect();
+      if (connect_obj != null) {
+        console.log("connected to db");
+        const sql = `insert into feedback(member_id,painting_id, ratings,comment) values(?,?,5,?)`;
+        const query = util.promisify(connect_obj.query).bind(connect_obj);
+        await query(sql, [member_id, painting_id, feedback_data]);
+        return;
+      }
+    } catch (err) {
+      throw new Error(err);
+    } finally {
+      console.log("Disconnected from db");
+      mysql_obj.disconnect();
+    }
+  }
+
   async fetchPaintingDetails(painting_id) {
     const mysql_obj = new MySQLBackend();
     try {
@@ -241,55 +281,70 @@ class OnlineAction {
     }
   }
 
-  async insertIntoPainting(request,seller_id){
+  async insertIntoPainting(request, seller_id) {
     const mysql_obj = new MySQLBackend();
-    
-    console.log("Request",request,)
-    console.log("Seller",seller_id)
 
-    try{
+    console.log("Request", request);
+    console.log("Seller", seller_id);
+
+    try {
       const connect_obj = mysql_obj.connect();
       if (connect_obj != null) {
+        var today = new Date();
+        var date =
+          today.getFullYear() +
+          "-" +
+          (today.getMonth() + 1) +
+          "-" +
+          today.getDate();
+        var time =
+          today.getHours() +
+          ":" +
+          today.getMinutes() +
+          ":" +
+          today.getSeconds();
+        var date_posted = date + " " + time;
 
-      var today = new Date();
-      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      var date_posted = date+' '+time;
+        var insert_values = [
+          seller_id,
+          request.title,
+          request.description,
+          request.width,
+          request.length,
+          date_posted,
+          request.start_date,
+          request.end_date,
+          request.initial_bid_price,
+          request.increment,
+        ];
 
-      var insert_values = [seller_id,request.title,request.description,request.width,request.length,date_posted,
-      request.start_date,request.end_date,
-      request.initial_bid_price,request.increment]
+        var sql = `insert into painting(seller_id,title,description,width,length,date_posted,start_date,end_date,initial_bid_price,increment) values(?,?,?,?,?,?,?,?,?,?)`;
+        const query = util.promisify(connect_obj.query).bind(connect_obj);
+        await query(sql, insert_values);
 
-      var sql = `insert into painting(seller_id,title,description,width,length,date_posted,start_date,end_date,initial_bid_price,increment) values(?,?,?,?,?,?,?,?,?,?)`
-      const query = util.promisify(connect_obj.query).bind(connect_obj);
-      await query(sql, insert_values);
-      
-      sql = `select max(painting_id) as painting_id from painting`
-      var  painting_id  = (await query(sql, insert_values))[0]["painting_id"];
+        sql = `select max(painting_id) as painting_id from painting`;
+        var painting_id = (await query(sql, insert_values))[0]["painting_id"];
 
-      if (request.painting_type=="1"){
-        sql = `insert into digitalpainting (painting_id,brushstrokes,resolution) values(?,?,?)`
-        await query(sql, [painting_id,request.brushstrokes,request.resolution]);
+        if (request.painting_type == "1") {
+          sql = `insert into digitalpainting (painting_id,brushstrokes,resolution) values(?,?,?)`;
+          await query(sql, [
+            painting_id,
+            request.brushstrokes,
+            request.resolution,
+          ]);
+        } else if (request.painting_type == "2") {
+          sql = `insert into oilpainting (painting_id,oil_type) values(?,?)`;
+          await query(sql, [painting_id, request.oiltype]);
+        } else if (request.painting_type == "3") {
+          sql = `insert into sandpainting (painting_id,captured_with) values(?,?)`;
+          await query(sql, [painting_id, request.capturedwith]);
+        }
+        return;
       }
-      else if (request.painting_type=="2"){
-        sql = `insert into oilpainting (painting_id,oil_type) values(?,?)`
-        await query(sql, [painting_id,request.oiltype]);
-      }
-      else if (request.painting_type=="3"){
-        sql = `insert into sandpainting (painting_id,captured_with) values(?,?)`
-        await query(sql, [painting_id,request.capturedwith]);
-      }
-      return;
-      
+    } catch (err) {
+      throw new Error(err);
     }
-
-
-    } catch (err){
-        throw new Error(err);
-    }
-
   }
-
 }
 
 module.exports = OnlineAction;

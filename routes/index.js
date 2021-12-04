@@ -1,4 +1,5 @@
 const e = require("cors");
+const { response } = require("express");
 const express = require("express");
 
 const router = express.Router();
@@ -47,6 +48,17 @@ module.exports = () => {
       });
     }
   );
+
+  router.get("/feedback/:feedback_id", async (request, response, next) => {
+    var painting_id = request.params.feedback_id;
+    const oa = new OnlineAction();
+    const feedback_details = await oa.fetchFeedbackDetails(painting_id);
+    console.log(feedback_details);
+    response.render("feedback_details", {
+      pageTitle: "Feedback Details",
+      feedback_item: feedback_details,
+    });
+  });
 
   router.get("/paintings_won", isBuyer, async (request, response) => {
     const oa = new OnlineAction();
@@ -98,6 +110,22 @@ module.exports = () => {
       details_profile: profile_details,
       isSeller: isSeller,
     });
+  });
+
+  router.post("/feedback_item", async (request, response) => {
+    var { feedback, painting_id } = request.body;
+    const oa = new OnlineAction();
+    console.log("feedback", feedback, painting_id);
+    var buyer_email = request.session.userInfo;
+    var buyer_ids = await oa.fetchBuyerId(buyer_email);
+    var buyer_id = buyer_ids[0].member_id;
+    await oa.insertIntoFeedback(feedback, buyer_id, painting_id);
+    if (request.session.isBuyer) {
+      console.log(buyer_email);
+      response.redirect("/paintings_won");
+    } else {
+      response.redirect("/paintings_sold");
+    }
   });
 
   router.post("/biditem", isBuyer, async (request, response) => {
@@ -179,17 +207,6 @@ module.exports = () => {
       paintings_unsold: paintings_unsold,
     });
   });
-
-  router.get("/postpainting", isSeller, async (request, response) => {
-
-    response.render("upload_paintings",{
-      pageTitle: "Upload Painting",
-    })
-    
-  });
-
-
-  
 
   return router;
 };

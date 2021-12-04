@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `member`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `member` (
-  `member_id` int NOT NULL,
+  `member_id` int NOT NULL auto_increment,
   `email_id` varchar(50) DEFAULT NULL,
   `password` varchar(20) NOT NULL,
   `fname` varchar(30) NOT NULL,

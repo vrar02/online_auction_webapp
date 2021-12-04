@@ -43,15 +43,17 @@
                         
                         <div class="buttons d-flex flex-row  ">
                             <!-- <div class="cart"><i class="fa fa-shopping-cart"><span>$300</span></i></div> -->
-                             <button name="bid_details" class="btn btn-warning cart-button btn-block">
-                                <span class="dot">1</span>Current Bid Price: $ <%=element.current_bid_price%>  </button>
+                                <%if(element.current_bid_price==0){%>
+                                    <button name="bid_details" class="btn btn-danger cart-button btn-block">
+                                
+                                    <span class="dot">1</span>Current Bid Price: No BID </button>
+                                <% }else{ %> 
+                                    <button name="bid_details" class="btn btn-warning cart-button btn-block">
+                                    <span class="dot">1</span>Current Bid Price: $ <%=element.current_bid_price%>  </button>
+                                <% } %> 
                         </div>
                         <div class="weight"> <small>Increment :<%=element.increment%>$</small></div>
-                        
-                                
-                    
-                            
-            
+
                         </div>
                 </div>
             </div>

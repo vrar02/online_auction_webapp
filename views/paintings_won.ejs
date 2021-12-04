@@ -48,12 +48,15 @@
                         <div class="weight"> <small>Seller : <%=element.fname%></small></div>
                         
                                 
-                                <form action="#" >
+                                <form action="/feedback_item" method="post" >
                                     <!-- <label for="fname">Feedback:</label> -->
                                     
-                                    <input type="text" maxLength="5" id="feedback" value="" name="feeback">
+                                    <input type="text" maxLength="100" id="feedback_details" name="feedback" value="">
+                                    <input type="hidden" name="painting_id" value="<%=element.painting %>">
                                     <input type="submit" value="Feedback">   
                                 </form>
+                                <br>
+                                <a href="/feedback/<%=element.painting %>" target="_blank"><button >Comments</button></a>
                             
             
                         </div>
