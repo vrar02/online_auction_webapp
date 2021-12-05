@@ -7,8 +7,8 @@ module.exports = {
       host: "localhost",
       port: 3306,
       user: "root",
-      password: "akshay3895",
-      database: "auctionsystem3",
+      password: "root",
+      database: "auctionsystem",
     },
   },
 };
