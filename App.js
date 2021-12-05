@@ -6,6 +6,7 @@ const session = require("express-session");
 const mysql2 = require("mysql2/promise");
 const MySQLStore = require("express-mysql-session")(session);
 const VerifyLogin = require("./services/VerfiyLogin");
+const Register = require("./services/Register");
 const OnlineAuction = require("./services/OnlineAuction");
 const multer = require("multer")
 
@@ -112,6 +113,21 @@ module.exports = (config) => {
     
     });
   })
+  
+  app.use("/register", async (request, response) =>{
+
+    var register_obj = new Register();
+    var result = await register_obj.register(request.body)
+    
+    console.log("Result",result)
+
+    if (result!=null)
+      response.status(404).send(result.err)
+    else{
+      response.json({success: true, msg: 'User registered'})
+    }
+
+  });
 
 
   app.use("/login", async (request, response) => {

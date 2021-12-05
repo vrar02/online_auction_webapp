@@ -45,7 +45,7 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,'p@gmail.com','a','vivek','a','reddy','courtyards','dallas','texas','US',75248),(2,'q@gmail.com','aa','mani','a','kumar','eof','CA','texas','US',75249),(4,'r@gmail.com','aaa','akshay','a','ram','pearl','SA','texas','US',75250),(5,'s@gmail.com','aaaa','naveen','a','shetty','marquis','dallas','texas','US',75243),(6,'t@gmail.com','ab','chirag','a','S','cityline','dallas','texas','US',75241),(7,'u@gmail.com','abc','chirag','a','A','ashwood','plano','texas','US',75242),(8,'v@gmail.com','abcd','vikky','a','B','eof','frisco','texas','US',75246),(9,'w@gmail.com','ae','manu','a','D','cityline','plano','texas','US',75253);
+INSERT INTO `member` VALUES (1,'p@gmail.com','a','vivek','a','reddy','courtyards','dallas','texas','US',75248),(2,'q@gmail.com','aa','mani','a','kumar','eof','CA','texas','US',75249),(3,'r@gmail.com','aaa','akshay','a','ram','pearl','SA','texas','US',75250),(4,'s@gmail.com','aaaa','naveen','a','shetty','marquis','dallas','texas','US',75243),(5,'t@gmail.com','ab','chirag','a','S','cityline','dallas','texas','US',75241),(6,'u@gmail.com','abc','chirag','a','A','ashwood','plano','texas','US',75242),(7,'v@gmail.com','abcd','vikky','a','B','eof','frisco','texas','US',75246),(8,'w@gmail.com','ae','manu','a','D','cityline','plano','texas','US',75253);
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

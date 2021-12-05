@@ -208,5 +208,13 @@ module.exports = () => {
     });
   });
 
+  router.get("/postpainting", isSeller, async (request, response) => {
+
+    response.render("upload_paintings",{
+      pageTitle: "Upload Painting",
+    })
+
+  });
+
   return router;
 };
