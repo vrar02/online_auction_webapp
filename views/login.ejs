@@ -1,13 +1,93 @@
 <!DOCTYPE html>
 
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
 <script src="./js/site.js"></script>
 <link href="./css/site.css" rel="stylesheet">
 <script>src="/socket.io/socket.io.js"</script>
+<script>
+	function onLoad(){
+		$("#register-form").on("submit", function(event) {
+			event.preventDefault();
+			$.ajax({
+				url: '/register',
+				type: 'POST',
+				cache: false,
+				data:  $(this).serialize(),
+				success: function(data) {
+
+					$("#success").text("User succesfully registered")
+					$("#success").fadeTo(2000, 500).slideUp(500, function(){
+    					$("#success").slideUp(500);
+					});
+
+				},
+				error: function(jqXHR, textStatus, err) {
+
+					$("#failure").text(jqXHR.responseText) // Will contain the text present in our repsonse
+					$("#failure").fadeTo(2000, 500).slideUp(500, function(){
+    					$("#failure").slideUp(500);
+					});
+				}
+			});
+			});
+
+	  $('#reg-password, #confirm-password').on('keyup', function () {
+  		if ($('#reg-password').val() == $('#confirm-password').val()) {
+			$('#confirm-password').css("background","white") 
+  		} else 
+		  	$('#confirm-password').css("background","#f8d7da") 
+		});
+
+	  $("#user_type").change(function(e){
+		var user_type =  $(this).val()
+		console.log("HEYYY")
+		var toAppend = ''
+		$("buyer_or_seller").html("")
+		
+		if (user_type==1){
+		  toAppend = `<br><label>Shipping Details</label>
+			<div class="form-group">
+				<div class="form-group">
+					<input type="text" name="ship_addrs" id="ship_addrs" tabindex="1" class="form-control" placeholder="Address" value="" required>
+				</div>
+				<div class="form-group">
+					<input type="text" name="ship_city" id="ship_city" tabindex="1" class="form-control" placeholder="City" value="" required>
+				</div>
+				<div class="form-group">
+					<input type="text" name="ship_state" id="ship_state" tabindex="1" class="form-control" placeholder="State" value="" required>
+				</div>
+				<div class="form-group">
+					<input type="text" name="ship_country" id="ship_country" tabindex="1" class="form-control" placeholder="Country" value="" required>
+				</div>
+				<div class="form-group">
+					<input type="number" name="ship_pincode" id="ship_pincode" tabindex="1" class="form-control" placeholder="Pincode" value="" required>
+				</div>
+			</div> `
+		  $("#buyer_or_seller").html(toAppend); return;
+		}
+		else if (user_type==2){
+		  toAppend = `<br><label>Bank Account Details</label>
+			<div class="form-group">
+				<div class="form-group">
+					<input type="number" name="acc_no" id="acc_no" tabindex="1" class="form-control" placeholder="Account No." value="" onKeyPress="if(this.value.length==7) return false; required">
+				</div>
+				<div class="form-group">
+					<input type="number" name="route_no" id="route_no" tabindex="1" class="form-control" placeholder="Routing No." value="" onKeyPress="if(this.value.length==7) return false; required">
+				</div>
+			</div> `
+		  $("#buyer_or_seller").html(toAppend); return;
+		}
+  
+	  })
+	}
+  
+  </script>
 <!------ Include the above in your HEAD tag ---------->
 
+<body onload="onLoad()">
 <div class="container">
     	<div class="row">
 			<div class="col-md-6 col-md-offset-3">
@@ -27,16 +107,15 @@
 						<div class="row">
 							<div class="col-lg-12">
 								<form id="login-form" action="/login" method="post" role="form" style="display: block;">
+
 									<div class="form-group">
-										<input type="text" name="email" id="email" tabindex="1" class="form-control" placeholder="Username" value="">
+										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
 									<div class="form-group">
 										<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
 									</div>
-									<div class="form-group text-center">
-										<input type="checkbox" tabindex="3" class="" name="remember" id="remember">
-										<label for="remember"> Remember Me</label>
-									</div>
+
+
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-6 col-sm-offset-3">
@@ -44,39 +123,96 @@
 											</div>
 										</div>
 									</div>
-									<div class="form-group">
-										<div class="row">
-											<div class="col-lg-12">
-												<div class="text-center">
-													<a href="https://phpoll.com/recover" tabindex="5" class="forgot-password">Forgot Password?</a>
-												</div>
-											</div>
-										</div>
-									</div>
 								</form>
-								<form id="register-form" action="https://phpoll.com/register/process" method="post" role="form" style="display: none;">
+								<form id="register-form" role="form" style="display: none;">
 									<div class="form-group">
-										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+										<input type="text" name="firstname" id="fname" tabindex="1" class="form-control" placeholder="First Name" value="" required>
 									</div>
 									<div class="form-group">
-										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
+										<input type="text" name="middlename" id="mname" tabindex="1" class="form-control" placeholder="Middle Name" value="">
 									</div>
 									<div class="form-group">
-										<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+										<input type="text" name="lastname" id="lname" tabindex="1" class="form-control" placeholder="Last Name" value="" required>
 									</div>
 									<div class="form-group">
-										<input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+										<input type="text" name="street" id="street" tabindex="1" class="form-control" placeholder="Street" value="" required>
 									</div>
 									<div class="form-group">
-										<div class="row">
-											<div class="col-sm-6 col-sm-offset-3">
-												<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
+										<input type="text" name="city" id="city" tabindex="1" class="form-control" placeholder="City" value="" required>
+									</div>
+									<div class="form-group">
+										<input type="text" name="state" id="state" tabindex="1" class="form-control" placeholder="State" value="" required>
+									</div>
+									<div class="form-group">
+										<input type="text" name="country" id="country" tabindex="1" class="form-control" placeholder="Country" value="" required>
+									</div>
+									<div class="form-group">
+										<input type="number" name="pincode" id="pincode" tabindex="1" class="form-control" placeholder="Pincode" value="" required>
+									</div>
+									<div class="form-group">
+										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="" required>
+									</div>
+									<div class="form-group">
+										<input type="password" name="password" id="reg-password" tabindex="2" class="form-control" placeholder="Password" required>
+									</div>
+									<div class="form-group">
+										<input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password" required>
+										<span id='message'></span>
+									</div>
+
+									<label for="user_type">User Type</label>
+									<select id="user_type" name="user_type" required>
+										<option value="1">Buyer</option>
+										<option value="2">Seller</option>
+									</select>
+
+									<div id="buyer_or_seller">
+										<br>
+										<label >Shipping Details</label>
+										<div class="form-group">
+											<div class="form-group">
+												<input type="text" name="ship_addrs" id="ship_addrs" tabindex="1" class="form-control" placeholder="Address" value="" required>
 											</div>
+											<div class="form-group">
+												<input type="text" name="ship_city" id="ship_city" tabindex="1" class="form-control" placeholder="City" value="" required>
+											</div>
+											<div class="form-group">
+												<input type="text" name="ship_state" id="ship_state" tabindex="1" class="form-control" placeholder="State" value="" required>
+											</div>
+											<div class="form-group">
+												<input type="text" name="ship_country" id="ship_country" tabindex="1" class="form-control" placeholder="Country" value="" required>
+											</div>
+											<div class="form-group">
+												<input type="number" name="ship_pincode" id="ship_pincode" tabindex="1" class="form-control" placeholder="Pincode" value="" required>
+										   </div>
 										</div>
 									</div>
+
+									<div class="row">
+										<div class="col-sm-6 col-sm-offset-3">
+											<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
+											<div id="submitted_text" style="text-align: center;display: none;" >Successfully Submitted</div>
+										</div>
+									</div>
+									<br>
+			
+									<div id="success" class="alert alert-success" style="display: none;">
+
+									</div>
+
+									<div id="failure"class="alert alert-danger" style="display: none;">
+
+									</div>
+
+								</div>
+
+
+									</div>
+									
 								</form>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+</body>

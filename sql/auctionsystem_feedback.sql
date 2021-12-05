@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `feedback`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE feedback (
-Feedback int not null auto_increment,
+feedback_id int not null auto_increment,
 member_id INT NOT NULL, 
 painting_id INT NOT NULL, 
 ratings INT, 
@@ -40,7 +40,7 @@ FOREIGN KEY(painting_id) REFERENCES painting(painting_id));
 
 LOCK TABLES `feedback` WRITE;
 /*!40000 ALTER TABLE `feedback` DISABLE KEYS */;
-INSERT INTO `feedback` VALUES (2,4,4,'Yay won my first bid'),(9,6,5,'Won without any competition');
+INSERT INTO `feedback` VALUES (1,4,4,5,'Yay won my first bid'),(2,6,5,5,'Won without any competition');
 /*!40000 ALTER TABLE `feedback` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

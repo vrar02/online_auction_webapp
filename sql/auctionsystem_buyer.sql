@@ -39,7 +39,7 @@ CREATE TABLE `buyer` (
 
 LOCK TABLES `buyer` WRITE;
 /*!40000 ALTER TABLE `buyer` DISABLE KEYS */;
-INSERT INTO `buyer` VALUES (2,'23103courtyards','dallas','texas','USA',12345),(9,'1405cityline','charlotte','Carolina','USA',34567);
+INSERT INTO `buyer` VALUES (2,'23103courtyards','dallas','texas','USA',12345),(8,'1405cityline','charlotte','Carolina','USA',34567);
 /*!40000 ALTER TABLE `buyer` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
